@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->foreignId('project_id')->constrained('projects');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

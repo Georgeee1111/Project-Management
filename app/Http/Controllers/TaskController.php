@@ -13,6 +13,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TaskAssigned;
 
 class TaskController extends Controller
 {
@@ -71,7 +74,20 @@ class TaskController extends Controller
         if ($image) {
             $data['image_path'] = $image->store('task/' . Str::random(), 'public');
         }
-        Task::create($data);
+        $task = Task::create($data);
+
+        // Send an email to the assigned user via the stored procedure
+        if (isset($data['assigned_user_id'])) {
+            // Call the stored procedure to get the email address
+            $result = DB::select('CALL assign_task(?, ?)', [$task->id, $data['assigned_user_id']]);
+            $userEmail = $result[0]->email;
+
+            // Send the email using Laravel's Mail facade
+            if ($userEmail) {
+                $assignedUser = User::find($data['assigned_user_id']);
+                Mail::to($userEmail)->send(new TaskAssigned($task, $assignedUser));
+            }
+        }
 
         return to_route('task.index')
             ->with('success', 'Task was created');

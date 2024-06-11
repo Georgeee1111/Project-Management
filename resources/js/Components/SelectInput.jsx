@@ -1,10 +1,16 @@
-import { forwardRef, useRef } from "react";
+// SelectInput.jsx
+import { forwardRef, useRef, useEffect } from "react";
 
 export default forwardRef(function SelectInput(
-  { className = "", children, ...props },
+  { className = "", children, value, ...props },
   ref
 ) {
   const input = ref ? ref : useRef();
+
+  // Log the value prop on component update
+  useEffect(() => {
+    console.log("Value prop in SelectInput:", value);
+  }, [value]);
 
   return (
     <select
@@ -14,6 +20,8 @@ export default forwardRef(function SelectInput(
         className
       }
       ref={input}
+      value={value} // Ensure that the value prop is correctly assigned
+      onChange={(e) => props.onChange(e)} // Pass onChange event to parent component
     >
       {children}
     </select>

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
@@ -132,11 +133,21 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $name = $project->name;
-        $project->delete();
-        if ($project->image_path) {
-            Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+        
+        try {
+            $project->delete();
+            if ($project->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+            }
+            return to_route('project.index')
+                ->with('success', "Project \"$name\" was deleted");
+        } catch (QueryException $e) {
+            if($e->getCode() == '23000') { 
+                return to_route('project.index')
+                    ->with('error', "Project \"$name\" cannot be deleted because it has associated tasks.");
+            }
+            
+            throw $e;
         }
-        return to_route('project.index')
-            ->with('success', "Project \"$name\" was deleted");
     }
 }

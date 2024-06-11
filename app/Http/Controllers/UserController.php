@@ -72,8 +72,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $roles = ['admin', 'employee', 'manager']; 
+
+        // Log the user data before passing it to the frontend
+        logger()->info('User data in UserController:', ['user' => $user]);
+
         return inertia('User/Edit', [
             'user' => new UserCrudResource($user),
+            'roles' => $roles,
         ]);
     }
 

@@ -1,25 +1,29 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import SelectInput from "@/Components/SelectInput";
-import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth, user }) {
-  const { data, setData, post, errors, reset } = useForm({
+export default function Edit({ auth, user, roles }) {
+  const { data, setData, put, errors } = useForm({
     name: user.name || "",
     email: user.email || "",
     password: "",
     password_confirmation: "",
+    role: user.role || "",
     _method: "PUT",
   });
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    post(route("user.update", user.id));
+    put(route("user.update", user.id));
   };
+
+  console.log(user);
+  console.log(roles);
+  console.log("User Role:", user.role);
+  console.log("User:", user);
 
   return (
     <AuthenticatedLayout
@@ -108,6 +112,27 @@ export default function Create({ auth, user }) {
                   className="mt-2"
                 />
               </div>
+
+              <div className="mt-4">
+                <InputLabel htmlFor="user_role" value="Role" />
+
+                <SelectInput
+                  id="user_role"
+                  name="role"
+                  value={data.role}
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("role", e.target.value)}
+                >
+                  {roles.map((role) => (
+                    <option key={role} value={role}>
+                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                    </option>
+                  ))}
+                </SelectInput>
+
+                <InputError message={errors.role} className="mt-2" />
+              </div>
+
               <div className="mt-4 text-right">
                 <Link
                   href={route("user.index")}

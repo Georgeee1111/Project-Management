@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory;
+    use SoftDeletes; 
 
     protected $fillable = ['image_path', 'name', 'description', 'status', 'due_date', 'created_by', 'updated_by'];
+    protected $dates = ['deleted_at']; 
 
     public function tasks()
     {
@@ -26,3 +27,4 @@ class Project extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 }
+

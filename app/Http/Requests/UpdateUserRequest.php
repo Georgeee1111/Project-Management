@@ -36,6 +36,23 @@ class UpdateUserRequest extends FormRequest
                 'confirmed',
                 Password::min(8)->letters()->symbols(),
             ],
+            'role' => 'required|string|in:admin,employee,manager',
         ];
     }
+
+    /**
+     * Get the validated data after validation.
+     *
+     * @return array<string, mixed>
+     */
+        public function validated($key = null, $default = null)
+    {
+        $validated = parent::validated();
+
+        // Optionally, you can append additional data here if needed
+        // For example, you might fetch the updated user data from the database
+
+        return $validated;
+    }
 }
+

@@ -1,5 +1,5 @@
 <?php
-
+    
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -40,12 +40,16 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'employee',
         ]);
 
         event(new Registered($user));
 
+        // Send verification email
+        $user->sendEmailVerificationNotification();
+
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('dashboard'));
     }
 }
