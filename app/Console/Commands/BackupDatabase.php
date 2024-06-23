@@ -17,7 +17,6 @@ class BackupDatabase extends Command
 
     public function handle()
     {
-        // Run the backup job
         $backupJob = BackupJobFactory::createFromArray(config('backup'));
         $backupJob->run();
 

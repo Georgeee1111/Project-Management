@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('status', function (Blueprint $table) {
-            $table->id();
+        Schema::create('priority', function (Blueprint $table) {
+            $table->bigIncrements('priority_id');
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('status');
+        Schema::dropIfExists('priority');
     }
 };

@@ -72,7 +72,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = ['admin', 'employee', 'manager']; 
+        $roles = ['admin', 'employee']; 
 
         // Log the user data before passing it to the frontend
         logger()->info('User data in UserController:', ['user' => $user]);

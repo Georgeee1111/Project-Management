@@ -16,7 +16,9 @@ return new class extends Migration {
             $table->longText('description')->nullable();
             $table->string('image_path')->nullable();
             $table->string('status');
+            $table->foreign('status')->references('name')->on('status');
             $table->string('priority');
+            $table->foreign('priority')->references('name')->on('priority');
             $table->string('due_date')->nullable();
             $table->foreignId('assigned_user_id')->constrained('users');
             $table->foreignId('created_by')->constrained('users');

@@ -5,7 +5,11 @@ import {
   PROJECT_STATUS_TEXT_MAP,
 } from "@/constants.jsx";
 import TasksTable from "../Task/TasksTable";
+
 export default function Show({ auth, success, project, tasks, queryParams }) {
+  const createdBy = project.createdBy ? project.createdBy.name : "Unknown";
+  const updatedBy = project.updatedBy ? project.updatedBy.name : "Unknown";
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -45,7 +49,6 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
                     <label className="font-bold text-lg">Project Name</label>
                     <p className="mt-1">{project.name}</p>
                   </div>
-
                   <div className="mt-4">
                     <label className="font-bold text-lg">Project Status</label>
                     <p className="mt-1">
@@ -61,7 +64,7 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
                   </div>
                   <div className="mt-4">
                     <label className="font-bold text-lg">Created By</label>
-                    <p className="mt-1">{project.createdBy.name}</p>
+                    <p className="mt-1">{createdBy}</p>
                   </div>
                 </div>
                 <div>
@@ -75,11 +78,10 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
                   </div>
                   <div className="mt-4">
                     <label className="font-bold text-lg">Updated By</label>
-                    <p className="mt-1">{project.updatedBy.name}</p>
+                    <p className="mt-1">{updatedBy}</p>
                   </div>
                 </div>
               </div>
-
               <div className="mt-4">
                 <label className="font-bold text-lg">Project Description</label>
                 <p className="mt-1">{project.description}</p>
@@ -88,7 +90,6 @@ export default function Show({ auth, success, project, tasks, queryParams }) {
           </div>
         </div>
       </div>
-
       <div className="pb-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
